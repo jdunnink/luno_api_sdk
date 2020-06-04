@@ -7,9 +7,6 @@ impl Quotes for LunoClient {
 
         let url_str = self.get_base_url(Some(&format!("/api/1/quotes/{}", id)));
 
-        let url = Url::parse(&url_str)
-            .unwrap();
-
         let resp = self.dispatch(Method::GET, url_str, true).await?;
 
         Ok(resp)
