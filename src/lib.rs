@@ -2,17 +2,16 @@ extern crate reqwest;
 extern crate tokio;
 extern crate chrono;
 
-use chrono::NaiveDateTime;
 use std::collections::HashMap;
 use reqwest::Url;
 use reqwest::Client;
+use reqwest::Method;
 
 pub struct LunoClient {
-    pub base_url: String,
-    pub append_url: String,
-    pub api_key: String,
-    pub api_secret: String,
-    pub client: reqwest::Client,
+    base_url: String,
+    api_key: String,
+    api_secret: String,
+    client: reqwest::Client,
 }
 
 impl LunoClient {
@@ -21,14 +20,13 @@ impl LunoClient {
     
         LunoClient {
             base_url: String::from("https://api.mybitx.com"),
-            append_url: String::from(""),
             api_key: String::from(api_key),
             api_secret: String::from(api_secret),
             client: Client::new(),
         }
     }
 
-    fn get_base_url(&self, append: Option<&str>) -> String {
+    pub fn get_base_url(&self, append: Option<&str>) -> String {
 
         let mut base_url = String::from(&self.base_url);
         
@@ -40,7 +38,7 @@ impl LunoClient {
         base_url
     }
 
-    fn add_url_params(&self, mut url_str: String, params: HashMap<&str, String>) -> String {
+    pub fn add_url_params(&self, mut url_str: String, params: HashMap<&str, String>) -> String {
 
         let len = params.len();
         let mut i = 0;
@@ -55,85 +53,30 @@ impl LunoClient {
         url_str
     }
 
-    pub async fn get_ticker(&mut self, ticker: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>> {
- 
-        let url_str = self.get_base_url(Some(&format!("/api/1/ticker?pair={}", ticker)));
- 
-        let url = Url::parse(&url_str)
-            .unwrap();
- 
-        let resp = (&self.client)
-            .get(url)
-            .send()
-            .await?;      
+    pub async fn go_get(&self, url: reqwest::Url, auth: bool) -> Result<reqwest::Response, Box<dyn std::error::Error>> {
 
-        Ok(resp)
-    }
+        let mut reqw = (&self.client).get(url);
 
-    pub async fn get_tickers(&mut self) -> Result<reqwest::Response, Box<dyn std::error::Error>> {
-
-        let url_str = self.get_base_url(Some("/api/1/tickers"));
-
-        let url = Url::parse(&url_str)
-            .unwrap();
-
-        let resp = (&self.client)
-            .get(url)
-            .send()
-            .await?;
-
-        Ok(resp)
-    }
-
-    pub async fn list_trades_market(&mut self, pair: &str, since: Option<NaiveDateTime>) -> Result<reqwest::Response, Box<dyn std::error::Error>> {
-
-        let mut append = format!("/api/1/trades?pair={}", pair);
-
-        match since {
-            Some(t) => append.push_str(&format!("&since={}", t.timestamp_millis().to_string())),
-            None => (),
+        if auth == true {
+            reqw = reqw.basic_auth(&self.api_key, Some(&self.api_secret)); 
         }
 
-        let url_str = self.get_base_url(Some(&append));
-
-        let url = Url::parse(&url_str)
-            .unwrap();
-        let resp = (&self.client)
-            .get(url)
-            .send()
-            .await?;     
+        let resp = reqw.send().await?;
 
         Ok(resp)
     }
 
-    pub async fn get_orderbook_top(&mut self, pair: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>> {
- 
-        let url_str = self.get_base_url(Some(&format!("/api/1/orderbook_top?pair={}", pair)));
+    pub async fn dispatch(&self, method: Method, url_str: String, auth: bool) -> Result<reqwest::Response, Box<dyn std::error::Error>> {
+        
+        let url = Url::parse(&url_str).unwrap();
 
-        let url = Url::parse(&url_str)
-            .unwrap();
-
-        let resp = (&self.client)
-            .get(url)
-            .send()
-            .await?;
-
-        Ok(resp)
-    }
-
-    pub async fn get_orderbook(&mut self, pair: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>> {
- 
-        let url_str = self.get_base_url(Some(&format!("/api/1/orderbook?pair={}", pair)));
-
-        let url = Url::parse(&url_str)
-            .unwrap();
-
-        let resp = (&self.client)
-            .get(url)
-            .send()
-            .await?;
-
-        Ok(resp)
+        match method {
+            Method::GET => {
+                let resp = self.go_get(url, auth).await?;
+                Ok(resp)
+            }
+            _ => Err("error occurred: method not found in dispatch".into())
+        }
     }
 
     pub async fn get_balance(&mut self, assets: Vec<&str>) -> Result<reqwest::Response, Box<dyn std::error::Error>> {

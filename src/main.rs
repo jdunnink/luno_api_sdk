@@ -1,4 +1,9 @@
+
+mod market;
+
+use market::Market;
 use luno_sdk::LunoClient;
+
 //use chrono::{NaiveDate, NaiveTime, NaiveDateTime};
 use dotenv::dotenv;
 use std::env;
