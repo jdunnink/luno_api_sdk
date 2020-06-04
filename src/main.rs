@@ -3,6 +3,8 @@ use luno_sdk::LunoClient;
 use dotenv::dotenv;
 use std::env;
 
+//use std::collections::HashMap;
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
@@ -12,8 +14,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut luno_client = LunoClient::new(&api_key_id, &api_key_secret);
 
-//    let ticker_resp = luno_client.get_ticker("XBTEUR").await?;
-//    println!("get_ticker method --> received reponse: {}", ticker_resp);
+    let ticker_resp = luno_client.get_ticker("XBTEUR");
+    println!("get_ticker method --> received reponse: {}", ticker_resp.await?.text().await?);
 
 //    let tickers_resp = luno_client.get_tickers().await?;
 //    println!("get_tickers method --> received reponse: {}", tickers_resp);
@@ -44,8 +46,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 //    let pending_transaction_resp = luno_client.list_pending_transactions(test_account_id).await?;
 //    println!("list transactions method--> received response: {:?}", pending_transaction_resp);
 
-    let benef_resp = luno_client.list_beneficiaries().await?;
-    println!("list beneficiaries response: {:?}", benef_resp);
+//    let benef_resp = luno_client.list_beneficiaries().await?;
+//    println!("list beneficiaries response: {:?}", benef_resp);
+
+//    let fee_info_resp = luno_client.get_fee_info("XBTEUR");
+//    println!("fee info response: {:?}", fee_info_resp.await?);
+
+//    let get_recv_addr_resp = luno_client.get_receive_address("XBT", None);
+
+//    println!("response: {}", get_recv_addr_resp.await?.text().await?);
+
+ //   let withdrawal_resp = luno_client.list_withdrawal_requests();
+
+//    println!("response: {}", withdrawal_resp.await?.text().await?);
 
     Ok(())
 }
