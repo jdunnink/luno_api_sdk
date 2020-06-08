@@ -20,7 +20,7 @@ impl Orders for LunoClient {
             Some(p) => {
                 let len = p.len();
                 if len > 0 {
-                    url_str.push_str("?");
+                    url_str.push('?');
                     url_str = self.add_url_params(url_str, p);
                 }
             }

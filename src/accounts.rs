@@ -32,7 +32,7 @@ impl Accounts for LunoClient {
         while i < vec_len {
             url_str.push_str(&format!("assets={}", assets[i]));
             if i < vec_len - 1 {
-                url_str.push_str("&");
+                url_str.push('&');
             }
             i += 1;
         }

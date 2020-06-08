@@ -14,8 +14,6 @@ mod orders;
 
 // todo list //
 
-//      replace calls to push_str for single chars with push_char() ??
-//      remove await in functions and just return impl Future to keep the async stuff functional
 //      add post methods
 //      add put methods
 //      add unit tests

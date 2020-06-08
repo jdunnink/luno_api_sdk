@@ -31,7 +31,7 @@ impl LunoClient {
         for (key, value) in params {
             url_str.push_str(&format!("{}={}", key, value));
             if i < len - 1 {
-                url_str.push_str("&");
+                url_str.push('&');
             }
             i += 1;
         }
