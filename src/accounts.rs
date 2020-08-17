@@ -3,6 +3,39 @@ use super::*;
 #[async_trait]
 impl Accounts for LunoClient {
 
+    async fn update_account_name(&self, id: &str, name: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>>  {
+
+        let url_str = self.get_base_url(Some(&format!("/api/1/accounts/{}/name", id)));
+        let url = Url::parse(&url_str).unwrap();
+        let mut reqw = (&self.client).put(url);
+        let mut params = HashMap::new();
+        
+        params.insert("name", name);
+        reqw = reqw.form(&params);
+        reqw = reqw.basic_auth(&self.api_key, Some(&self.api_secret));
+
+        let resp = reqw.send().await?;
+
+        Ok(resp)
+    }
+
+    async fn create_account(&self, currency: &str, name: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>> {
+
+        let url_str = self.get_base_url(Some("/api/1/accounts"));
+        let url = Url::parse(&url_str).unwrap();
+        let mut reqw = (&self.client).post(url);
+        let mut params = HashMap::new();
+
+        params.insert("currency", currency);
+        params.insert("name", name);
+        reqw = reqw.form(&params);
+        reqw = reqw.basic_auth(&self.api_key, Some(&self.api_secret));
+
+        let resp = reqw.send().await?;
+
+        Ok(resp)
+    }
+
     async fn list_pending_transactions(&self, id: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>> {
 
         let url_str = self.get_base_url(Some(&format!("/api/1/accounts/{}/pending", id)));

@@ -1,6 +1,6 @@
 
 use luno_sdk::LunoClient;
-use luno_sdk::Market;
+use luno_sdk::Quotes;
 
 use dotenv::dotenv;
 use std::env;
@@ -14,8 +14,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let luno_client = LunoClient::new(&api_key_id, &api_key_secret);
 
-    let ticker_resp = luno_client.get_ticker("XBTEUR");
-    println!("get_ticker method --> received reponse: {}", ticker_resp.await?.text().await?);
+    let wdl_resp = luno_client.create_quote("SELL", 703.00, "EURXBT", None, None);
+    println!("create account method --> received reponse: {}", wdl_resp.await?.text().await?);
 
     Ok(())
 }

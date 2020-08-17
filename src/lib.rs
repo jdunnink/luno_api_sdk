@@ -11,6 +11,9 @@ mod market;
 mod client;
 mod beneficiaries;
 mod orders;
+mod withdrawals;
+mod receive;
+mod quotes;
 
 // todo list //
 
@@ -28,8 +31,8 @@ pub struct LunoClient {
 
 #[async_trait]
 pub trait Accounts {
-    // create account
-    // update account name
+    async fn create_account(&self, ticker: &str, name: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
+    async fn update_account_name(&self, id: &str, name: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
     async fn list_pending_transactions(&self, id: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
     async fn list_transactions(&self, id: &str, min_row: i32, max_row: i32) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
     async fn list_balances(&self, assets: Vec<&str>) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
@@ -63,6 +66,7 @@ pub trait Orders {
 #[async_trait]
 pub trait Quotes {
     // create quote
+    async fn create_quote(&self, action: &str, base_amount: f64, pair: &str, base_account_id: Option<&str>, counter_account_id: Option<&str>) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
     async fn get_quote(&self, id: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
     // exercise quote
     // discard quote
@@ -71,7 +75,7 @@ pub trait Quotes {
 #[async_trait]
 pub trait Receive {
     async fn get_receive_address(&self, asset: &str, address: Option<&str>) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
-    // create receive address
+    async fn create_receive_address(&self, asset: &str, name: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
 }
 
 // trait send
