@@ -65,7 +65,6 @@ pub trait Orders {
 
 #[async_trait]
 pub trait Quotes {
-    // create quote
     async fn create_quote(&self, action: &str, base_amount: f64, pair: &str, base_account_id: Option<&str>, counter_account_id: Option<&str>) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
     async fn get_quote(&self, id: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
     // exercise quote
