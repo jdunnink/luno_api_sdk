@@ -14,8 +14,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let luno_client = LunoClient::new(&api_key_id, &api_key_secret);
 
-    let wdl_resp = luno_client.create_quote("SELL", 703.00, "EURXBT", None, None);
-    println!("create account method --> received reponse: {}", wdl_resp.await?.text().await?);
+    let wdl_resp = luno_client.delete_quote("fake-id");
+    println!("received reponse: {}", wdl_resp.await?.text().await?);
 
     Ok(())
 }

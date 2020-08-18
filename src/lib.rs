@@ -14,6 +14,7 @@ mod orders;
 mod withdrawals;
 mod receive;
 mod quotes;
+mod send;
 
 // todo list //
 
@@ -67,8 +68,8 @@ pub trait Orders {
 pub trait Quotes {
     async fn create_quote(&self, action: &str, base_amount: f64, pair: &str, base_account_id: Option<&str>, counter_account_id: Option<&str>) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
     async fn get_quote(&self, id: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
-    // exercise quote
-    // discard quote
+    async fn exercise_quote(&self, id: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
+    async fn delete_quote(&self, id: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
 }
 
 #[async_trait]
@@ -77,13 +78,32 @@ pub trait Receive {
     async fn create_receive_address(&self, asset: &str, name: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
 }
 
-// trait send
-    // send
+#[async_trait]
+pub trait Send {
+    async fn send(
+                        &self,
+        amount:         &str,
+        currency:       &str,
+        address:        &str,
+        description:    Option<&str>,
+        message:        Option<&str>,
+        external_id:    Option<&str>,
+        dest_tag_flag:  bool,
+        dest_tag:       Option<&str>,
+    )  -> Result<reqwest::Response, Box<dyn std::error::Error>>;
+}
 
 #[async_trait]
 pub trait Withdrawals {
     async fn list_withdrawal_requests(&self) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
-    // request withdrawal
     async fn get_withdrawal(&self, id: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
-    // cancel withdrawal
+    async fn request_withdrawal(
+        &self,
+        action: &str,
+        amount: &str,
+        benef_id: Option<&str>,
+        reference: Option<&str>,
+        extern_id: Option<&str>    
+    ) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
+    async fn cancel_withdrawal_request(&self, id: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
 }
