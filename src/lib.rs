@@ -58,10 +58,29 @@ pub trait Orders {
     async fn get_fee_info(&self, pair: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
     async fn list_orders(&self, params: Option<HashMap<&str, String>>) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
     async fn list_trades_user(&self, mut params: HashMap<&str, String>) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
-    // post market order
+    async fn post_market_order(
+        &self,
+        pair:               &str,
+        action:             &str,
+        counter_volume:     Option<&str>,           // for buy orders
+        base_volume:        Option<&str>,           // for sell orders
+        base_account_id:    Option<i64>,
+        counter_account_id: Option<i64>,
+    )  -> Result<reqwest::Response, Box<dyn std::error::Error>>;
     async fn get_order(&self, id: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
-    // post limit order
-    // stop order
+    async fn post_limit_order(
+                            &self,
+        pair:               &str,
+        action:             &str,
+        post_only:          Option<&str>,
+        volume:             &str,
+        price:              &str,
+        stop_price:         Option<&str>,
+        stop_direction:     Option<&str>,
+        base_account_id:    Option<&str>,
+        counter_account_id: Option<&str>
+    )  -> Result<reqwest::Response, Box<dyn std::error::Error>>;
+    async fn stop_order(&self, order_id: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
 }
 
 #[async_trait]
