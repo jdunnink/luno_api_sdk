@@ -65,8 +65,8 @@ impl Orders for LunoClient {
         action:             &str,
         counter_volume:     Option<&str>,           // for buy orders
         base_volume:        Option<&str>,           // for sell orders
-        base_account_id:    Option<i64>,
-        counter_account_id: Option<i64>,
+        base_account_id:    Option<&str>,
+        counter_account_id: Option<&str>,
     )  -> Result<reqwest::Response, Box<dyn std::error::Error>> {
 
         let url_str = self.get_base_url(Some("/api/1/send"));
@@ -101,7 +101,7 @@ impl Orders for LunoClient {
 
         match counter_account_id {
             Some(c) => {
-                    params.insert("counter_account_id", &c.to_string());
+                    params.insert("counter_account_id", c);
             },
             None => (),
         }

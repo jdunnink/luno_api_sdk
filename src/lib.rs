@@ -64,8 +64,8 @@ pub trait Orders {
         action:             &str,
         counter_volume:     Option<&str>,           // for buy orders
         base_volume:        Option<&str>,           // for sell orders
-        base_account_id:    Option<i64>,
-        counter_account_id: Option<i64>,
+        base_account_id:    Option<&str>,
+        counter_account_id: Option<&str>,
     )  -> Result<reqwest::Response, Box<dyn std::error::Error>>;
     async fn get_order(&self, id: &str) -> Result<reqwest::Response, Box<dyn std::error::Error>>;
     async fn post_limit_order(
