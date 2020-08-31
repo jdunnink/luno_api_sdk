@@ -16,13 +16,6 @@ mod receive;
 mod quotes;
 mod send;
 
-// todo list //
-
-//      add post methods
-//      add put methods
-//      add unit tests
-//      add integration tests
-
 pub struct LunoClient {
     base_url: String,
     api_key: String,
