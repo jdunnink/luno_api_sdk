@@ -31,15 +31,18 @@ supported methods:  (last updated: 17-08-2020)
   - get_receive_address()
   - create_receive_address()
   - list_withdrawawl_requests()
-  - get_withdrawal()
-  
-  todo:
-  
+  - get_withdrawal()  
   - send()
   - request_withdrawal()
   - cancel_withdrawal()
   - exercise_quote()
   - discard_quote()
+  - post_market_order()
+  - post_limit_order()
+  - stop_order()
+  
+  todo:
+  
   - add unit tests
   - add integration tests
   - refactor method functionality
