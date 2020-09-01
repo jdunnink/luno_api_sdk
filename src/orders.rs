@@ -69,7 +69,7 @@ impl Orders for LunoClient {
         counter_account_id: Option<&str>,
     )  -> Result<reqwest::Response, Box<dyn std::error::Error>> {
 
-        let url_str = self.get_base_url(Some("/api/1/send"));
+        let url_str = self.get_base_url(Some("/api/1/marketorder"));
         let url = Url::parse(&url_str).unwrap();
         let mut reqw = (&self.client).post(url);
         let mut params = HashMap::new();
@@ -127,7 +127,7 @@ impl Orders for LunoClient {
         counter_account_id: Option<&str>
     )  -> Result<reqwest::Response, Box<dyn std::error::Error>> {
 
-        let url_str = self.get_base_url(Some("/api/1/send"));
+        let url_str = self.get_base_url(Some("/api/1/postorder"));
         let url = Url::parse(&url_str).unwrap();
         let mut reqw = (&self.client).post(url);
         let mut params = HashMap::new();
@@ -172,6 +172,7 @@ impl Orders for LunoClient {
                 None => (),
         }
 
+        println!("{:?}", params);
         reqw = reqw.form(&params);
         reqw = reqw.basic_auth(&self.api_key, Some(&self.api_secret));
 
