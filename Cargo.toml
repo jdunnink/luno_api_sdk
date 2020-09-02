@@ -1,6 +1,6 @@
 [package]
 name = "luno_sdk"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["jesse dunnink <dunninkjesse1@gmail.com>"]
 edition = "2018"
 description = "unofficial rust wrapper for the Luno API"
