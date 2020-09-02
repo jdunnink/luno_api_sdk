@@ -172,7 +172,6 @@ impl Orders for LunoClient {
                 None => (),
         }
 
-        println!("{:?}", params);
         reqw = reqw.form(&params);
         reqw = reqw.basic_auth(&self.api_key, Some(&self.api_secret));
 
